@@ -11,8 +11,8 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// In-memory scores store (replaced by MongoDB in Week 10)
-let scores = [];
+// MongoDB Score model
+const Score = require("./models/Score");
 
 // ── Routes ──────────────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ app.get("/api/questions/random", (req, res) => {
 });
 
 // POST /api/scores — submit a new score
-app.post("/api/scores", (req, res) => {
+app.post("/api/scores", async (req, res) => {
   const { playerName, score, totalQuestions } = req.body;
 
   if (!playerName || score === undefined || !totalQuestions) {
@@ -48,24 +48,30 @@ app.post("/api/scores", (req, res) => {
       .json({ error: "playerName, score, and totalQuestions are required" });
   }
 
-  const newScore = {
-    id: Date.now(),
-    playerName,
-    score,
-    totalQuestions,
-    date: new Date().toISOString(),
-  };
-
-  scores.push(newScore);
-  console.log("Score received:", newScore);
-
-  res.status(201).json(newScore);
+  try {
+    const newScore = await Score.create({
+      playerName,
+      score,
+      totalQuestions,
+      // date is set automatically by the schema default
+    });
+    console.log("Score saved:", newScore);
+    res.status(201).json(newScore);
+  } catch (error) {
+    console.error("Error saving score:", error.message);
+    res.status(500).json({ error: "Failed to save score" });
+  }
 });
 
 // GET /api/scores — return all scores, highest first
-app.get("/api/scores", (req, res) => {
-  const sorted = [...scores].sort((a, b) => b.score - a.score);
-  res.json(sorted);
+app.get("/api/scores", async (req, res) => {
+  try {
+    const scores = await Score.find().sort({ score: -1 }).limit(10);
+    res.json(scores);
+  } catch (error) {
+    console.error("Error fetching scores:", error.message);
+    res.status(500).json({ error: "Failed to fetch scores" });
+  }
 });
 
 // ── Start ────────────────────────────────────────────────────────
