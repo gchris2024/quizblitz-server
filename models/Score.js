@@ -20,6 +20,6 @@ const scoreSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { versionKey: false }); // disable __v field
 
 module.exports = mongoose.model("Score", scoreSchema);
