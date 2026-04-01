@@ -11,8 +11,9 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Score model
+// Model schemas
 const Score = require("./models/Score");
+const User = require('./models/User')
 
 // ── Routes ──────────────────────────────────────────────────────
 
