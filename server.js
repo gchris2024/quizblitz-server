@@ -12,6 +12,7 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+const verifyToken = require("./middleware/verifyToken");
 
 // Model schemas
 const Score = require("./models/Score");
