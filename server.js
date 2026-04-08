@@ -11,7 +11,7 @@ const PORT = 3000;
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "https://gchris2024.github.io/quizblitz/",
+  "https://gchris2024.github.io",
 ];
 
 // Middleware
