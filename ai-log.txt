@@ -1,1 +1,1 @@
-No AI Used
+GH copilot used to rephrase answers to `REFLECTION.md` and `QUIZ.md`
