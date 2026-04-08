@@ -9,8 +9,17 @@ const questions = require("./data/questions");
 const app = express();
 const PORT = 3000;
 
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://gchris2024.github.io/quizblitz/",
+];
+
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: ALLOWED_ORIGINS,
+  }),
+);
 app.use(express.json());
 const verifyToken = require("./middleware/verifyToken");
 
